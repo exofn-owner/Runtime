@@ -7,7 +7,10 @@ use ansi_term::Colour::*;
 pub mod system_metrics;
 use system_metrics::SystemMetrics;
 
-#[derive(Debug, Clone)]
+#[cfg(test)]
+mod tests;
+
+#[derive(Debug, Clone, Default)]
 pub struct Runtime {
     args: RuntimeArgs,
     system: SystemMetrics,
@@ -73,9 +76,10 @@ impl Display for Runtime {
     }
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone, Default)]
 pub enum OutputFormat {
     /// Human-readable formatted output
+    #[default]
     Pretty,
     /// Raw numerical values
     Raw,
@@ -84,7 +88,7 @@ pub enum OutputFormat {
 }
 
 /// Command line arguments structure
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct RuntimeArgs {
     pub format: OutputFormat,
     pub show_container: bool,
