@@ -3,16 +3,6 @@
 version = 4
 
 [[package]]
-name = "Runtime"
-version = "0.1.0"
-dependencies = [
- "ansi_term",
- "chrono",
- "clap",
- "sysinfo",
-]
-
-[[package]]
 name = "android-tzdata"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -315,6 +305,16 @@ checksum = "1465873a3dfdaa8ae7cb14b4383657caab0b3e8a0aa9ae8e04b044854c8dfce2"
 dependencies = [
  "crossbeam-deque",
  "crossbeam-utils",
+]
+
+[[package]]
+name = "runtime"
+version = "0.1.0"
+dependencies = [
+ "ansi_term",
+ "chrono",
+ "clap",
+ "sysinfo",
 ]
 
 [[package]]
