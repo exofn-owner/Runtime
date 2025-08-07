@@ -3,9 +3,12 @@
 //! Provides functionality to gather system metrics (uptime, load averages, users)
 //! and format them for display.
 
-use sysinfo::{System, SystemExt, LoadAvg};
-use crate::cli::OutputFormat;
+use sysinfo::{LoadAvg, System, SystemExt};
 
+use crate::OutputFormat;
+
+
+#[derive(Debug, Clone)]
 /// System metrics collector and formatter
 pub struct SystemMetrics {
     /// System uptime in seconds
@@ -16,19 +19,25 @@ pub struct SystemMetrics {
     pub user_count: usize,
 }
 
+impl Default for SystemMetrics {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl SystemMetrics {
     /// Creates a new SystemMetrics instance with refreshed data
     pub fn new() -> Self {
         let mut system = System::new_all();
         system.refresh_all();
-        
+
         Self {
             uptime: system.uptime(),
             load_avg: system.load_average(),
             user_count: system.users().len(),
         }
     }
-    
+
     /// Refreshes all metric values with current system data
     pub fn refresh(&mut self) {
         let mut system = System::new_all();
@@ -37,41 +46,44 @@ impl SystemMetrics {
         self.load_avg = system.load_average();
         self.user_count = system.users().len();
     }
-    
+
     /// Gets system boot time as UNIX timestamp
-    /// 
+    ///
     /// # Returns
     /// `Result<u64, sysinfo::SystemError>` - Boot time or error
     pub fn boot_time() -> u64 {
         System::new_all().boot_time()
     }
-}
 
-/// Formats uptime duration according to requested format
-pub fn format_uptime(uptime: u64, format: &OutputFormat) -> String {
-    match format {
-        OutputFormat::Raw => format!("{}", uptime),
-        OutputFormat::Pretty => {
-            let hours = uptime / 3600;
-            let minutes = (uptime % 3600) / 60;
-            format!("{} hour{} {} minute{}", 
-                hours, plural(hours), 
-                minutes, plural(minutes))
-        },
-        OutputFormat::Standard => {
-            let days = uptime / 86400;
-            let hours = (uptime % 86400) / 3600;
-            format!("{} days {} hours", days, hours)
+    /// Formats uptime duration according to requested format
+    pub fn format_uptime(&self, format: &OutputFormat) -> String {
+        match format {
+            OutputFormat::Raw => format!("{}", self.uptime),
+            OutputFormat::Pretty => {
+                let hours = self.uptime / 3600;
+                let minutes = (self.uptime % 3600) / 60;
+                format!(
+                    "{} hour{} {} minute{}",
+                    hours,
+                    plural(hours),
+                    minutes,
+                    plural(minutes)
+                )
+            }
+            OutputFormat::Standard => {
+                let days = self.uptime / 86400;
+                let hours = (self.uptime % 86400) / 3600;
+                format!("{} days {} hours", days, hours)
+            }
         }
+    }
+    /// Formats load averages into a tuple of floating point values
+    pub fn format_load_avg(&self) -> (f64, f64, f64) {
+        (self.load_avg.one, self.load_avg.five, self.load_avg.fifteen)
     }
 }
 
 /// Helper function for pluralization
 fn plural(count: u64) -> &'static str {
     if count != 1 { "s" } else { "" }
-}
-
-/// Formats load averages into a tuple of floating point values
-pub fn format_load_avg(load_avg: LoadAvg) -> (f64, f64, f64) {
-    (load_avg.one, load_avg.five, load_avg.fifteen)
 }

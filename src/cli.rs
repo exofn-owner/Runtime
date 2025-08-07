@@ -4,63 +4,56 @@
 
 use clap::{Arg, Command};
 
-/// Runtime display format options
-#[derive(Debug, PartialEq)]
-pub enum OutputFormat {
-    /// Human-readable formatted output
-    Pretty,
-    /// Raw numerical values
-    Raw,
-    /// Default system format
-    Standard,
-}
+use crate::{OutputFormat, RuntimeArgs};
 
-/// Command line arguments structure
-#[derive(Debug)]
-pub struct RuntimeArgs {
-    pub format: OutputFormat,
-    pub show_container: bool,
-    pub show_since: bool,
-}
+/// Runtime display format options
 
 /// Parses command line arguments using clap
-/// 
+///
 /// # Returns
 /// `RuntimeArgs` struct containing parsed arguments
-/// 
+///
 /// # Example
 /// ```no_run
 /// use runtime::cli::parse_args;
-/// 
+///
 /// let args = parse_args();
 /// ```
 pub fn parse_args() -> RuntimeArgs {
     let matches = Command::new("Runtime")
         .version(env!("CARGO_PKG_VERSION"))
         .about("Displays system runtime metrics with customizable formatting")
-        .arg_required_else_help(true)
+        // .arg_required_else_help(true)
         .arg(
             Arg::new("output-format")
                 .short('f')
                 .long("format")
                 .value_parser(["pretty", "raw", "standard"])
-                .default_value("standard")
-                .help("Output format style")
+                .default_value("pretty")
+                .help("Output format style"),
         )
         // Remove old format flags
-        .arg(Arg::new("container")
-            .short('c')
-            .long("container")
-            .help("Show container uptime")
-            .action(clap::ArgAction::SetTrue))
-        .arg(Arg::new("since")
-            .short('s')
-            .long("since")
-            .help("Show system up since timestamp")
-            .action(clap::ArgAction::SetTrue))
+        .arg(
+            Arg::new("container")
+                .short('c')
+                .long("container")
+                .help("Show container uptime")
+                .action(clap::ArgAction::SetTrue),
+        )
+        .arg(
+            Arg::new("since")
+                .short('s')
+                .long("since")
+                .help("Show system up since timestamp")
+                .action(clap::ArgAction::SetTrue),
+        )
         .get_matches();
-    
-    let format = match matches.get_one::<String>("output-format").expect("default is set").as_str() {
+
+    let format = match matches
+        .get_one::<String>("output-format")
+        .expect("default is set")
+        .as_str()
+    {
         "pretty" => OutputFormat::Pretty,
         "raw" => OutputFormat::Raw,
         "standard" => OutputFormat::Standard,
