@@ -7,7 +7,6 @@ use sysinfo::{LoadAvg, System, SystemExt};
 
 use crate::OutputFormat;
 
-
 #[derive(Debug, Clone)]
 /// System metrics collector and formatter
 pub struct SystemMetrics {

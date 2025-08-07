@@ -1,5 +1,5 @@
 [package]
-name = "Runtime"
+name = "runtime"
 version = "0.1.0"
 edition = "2024"
 
@@ -8,3 +8,5 @@ sysinfo = "0.27.0"
 ansi_term = "0.12.1"
 chrono = "0.4.23"
 clap = "4.5.0"
+
+[lib]
