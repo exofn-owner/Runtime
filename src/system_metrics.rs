@@ -18,6 +18,16 @@ pub struct SystemMetrics {
     pub user_count: usize,
 }
 
+impl PartialEq for SystemMetrics {
+    fn eq(&self, other: &Self) -> bool {
+        self.load_avg.one == other.load_avg.one
+            && self.load_avg.five == other.load_avg.five
+            && self.load_avg.fifteen == other.load_avg.fifteen
+            && self.uptime == other.uptime
+            && self.user_count == other.user_count
+    }
+}
+
 impl Default for SystemMetrics {
     fn default() -> Self {
         Self::new()
