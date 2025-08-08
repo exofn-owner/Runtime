@@ -1,69 +1,70 @@
-//! Command line interface configuration and parsing
+//! Command line interface matching the exact behavior of standard uptime
 //!
-//! This module handles argument parsing using clap and returns structured output.
+//! This module handles argument parsing to exactly match uptime's behavior
 
 use clap::{Arg, Command};
+use runtime::{OutputFormat, RuntimeArgs};
 
-use runtime::OutputFormat;
-use runtime::RuntimeArgs;
-
-/// Runtime display format options
-/// 
-/// Parses command line arguments using clap
+/// Parse command line arguments exactly like standard uptime
 ///
 /// # Returns
 /// `RuntimeArgs` struct containing parsed arguments
-///
-/// # Example
-/// ```no_run
-/// use runtime::cli::parse_args;
-///
-/// let args = parse_args();
-/// ```
 pub fn parse_args() -> RuntimeArgs {
-    let matches = Command::new("Runtime")
+    let matches = Command::new("runtime")
         .version(env!("CARGO_PKG_VERSION"))
-        .about("Displays system runtime metrics with customizable formatting")
-        // .arg_required_else_help(true)
-        .arg(
-            Arg::new("output-format")
-                .short('f')
-                .long("format")
-                .value_parser(["pretty", "raw", "standard"])
-                .default_value("pretty")
-                .help("Output format style"),
-        )
-        // Remove old format flags
+        .about("Show how long the system has been running")
+        .disable_version_flag(true)  // We handle version ourselves
         .arg(
             Arg::new("container")
                 .short('c')
                 .long("container")
-                .help("Show container uptime")
+                .help("show container uptime")
+                .action(clap::ArgAction::SetTrue),
+        )
+        .arg(
+            Arg::new("pretty")
+                .short('p')
+                .long("pretty")
+                .help("show uptime in pretty format")
+                .action(clap::ArgAction::SetTrue),
+        )
+        .arg(
+            Arg::new("raw")
+                .short('r')
+                .long("raw")
+                .help("show uptime values in raw format")
                 .action(clap::ArgAction::SetTrue),
         )
         .arg(
             Arg::new("since")
                 .short('s')
                 .long("since")
-                .help("Show system up since timestamp")
+                .help("system up since")
+                .action(clap::ArgAction::SetTrue),
+        )
+        .arg(
+            Arg::new("version")
+                .short('V')
+                .long("version")
+                .help("output version information and exit")
                 .action(clap::ArgAction::SetTrue),
         )
         .get_matches();
 
-    let format = match matches
-        .get_one::<String>("output-format")
-        .expect("default is set")
-        .as_str()
-    {
-        "pretty" => OutputFormat::Pretty,
-        "raw" => OutputFormat::Raw,
-        "standard" => OutputFormat::Standard,
-        _ => unreachable!("Invalid format variant"),
+    // Determine output format based on flags (priority order matches uptime)
+    let format = if matches.get_flag("since") {
+        OutputFormat::Since
+    } else if matches.get_flag("pretty") {
+        OutputFormat::Pretty
+    } else if matches.get_flag("raw") {
+        OutputFormat::Raw
+    } else {
+        OutputFormat::Standard
     };
 
     RuntimeArgs {
         format,
         show_container: matches.get_flag("container"),
-        show_since: matches.get_flag("since"),
+        show_version: matches.get_flag("version"),
     }
 }
