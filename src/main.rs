@@ -1,4 +1,7 @@
-use runtime::Runtime;
+use runtime::{Runtime, OutputFormat};
+use std::time::Duration;
+use std::thread;
+use colored::*;
 
 mod cli;
 
@@ -7,8 +10,16 @@ fn main() {
 
     // Handle version flag
     if args.show_version {
-        println!("runtime from uptime-rs {}", env!("CARGO_PKG_VERSION"));
+        println!("{}",
+            format!("* Runtime [Freaky Fork] {} *", env!("CARGO_PKG_VERSION"))
+                .bright_green().bold()
+        );
         return;
+    }
+
+    // Show minimal loading animation only for interactive mode
+    if args.format == OutputFormat::Interactive {
+        show_fast_loading();
     }
 
     // Create runtime and collect metrics
@@ -17,4 +28,29 @@ fn main() {
 
     // Print the result
     println!("{}", runtime);
+}
+
+fn show_fast_loading() {
+    let frames = ["|", "/", "-", "\\"];
+
+    print!("{}", "Loading system metrics".bright_cyan().bold());
+
+    // Much faster animation - only 200ms total
+    for _ in 0..8 {
+        for frame in &frames {
+            print!("\r{} {}",
+                "Loading system metrics".bright_cyan().bold(),
+                frame.bright_yellow().bold()
+            );
+            std::io::Write::flush(&mut std::io::stdout()).unwrap();
+            thread::sleep(Duration::from_millis(25)); // Much faster!
+        }
+    }
+
+    println!("\r{} {}",
+        "Loading system metrics".bright_cyan().bold(),
+        "Done!".bright_green().bold()
+    );
+
+    thread::sleep(Duration::from_millis(50)); // Minimal delay
 }

@@ -12,54 +12,73 @@ use runtime::{OutputFormat, RuntimeArgs};
 pub fn parse_args() -> RuntimeArgs {
     let matches = Command::new("runtime")
         .version(env!("CARGO_PKG_VERSION"))
-        .about("Show how long the system has been running")
+        .about("* Modern colorful uptime utility with interactive dashboard *")
+        .long_about("A modern replacement for the classic uptime command with beautiful colors,\nanimations, and multiple output formats.")
         .disable_version_flag(true)  // We handle version ourselves
         .arg(
             Arg::new("container")
                 .short('c')
                 .long("container")
-                .help("show container uptime")
+                .help("Show container uptime indicators")
                 .action(clap::ArgAction::SetTrue),
         )
         .arg(
             Arg::new("pretty")
                 .short('p')
                 .long("pretty")
-                .help("show uptime in pretty format")
+                .help("Show uptime in pretty human-readable format")
                 .action(clap::ArgAction::SetTrue),
         )
         .arg(
             Arg::new("raw")
                 .short('r')
                 .long("raw")
-                .help("show uptime values in raw format")
+                .help("Show uptime values in raw machine-readable format")
                 .action(clap::ArgAction::SetTrue),
         )
         .arg(
             Arg::new("since")
                 .short('s')
                 .long("since")
-                .help("system up since")
+                .help("Show system boot timestamp")
+                .action(clap::ArgAction::SetTrue),
+        )
+        .arg(
+            Arg::new("standard")
+                .long("standard")
+                .help("Show standard uptime format (like original uptime)")
+                .action(clap::ArgAction::SetTrue),
+        )
+        .arg(
+            Arg::new("interactive")
+                .short('i')
+                .long("interactive")
+                .help("Show interactive colorful dashboard (default)")
                 .action(clap::ArgAction::SetTrue),
         )
         .arg(
             Arg::new("version")
                 .short('V')
                 .long("version")
-                .help("output version information and exit")
+                .help("Show version information and exit")
                 .action(clap::ArgAction::SetTrue),
         )
         .get_matches();
 
-    // Determine output format based on flags (priority order matches uptime)
+    // Determine output format based on flags (priority order)
     let format = if matches.get_flag("since") {
         OutputFormat::Since
-    } else if matches.get_flag("pretty") {
-        OutputFormat::Pretty
     } else if matches.get_flag("raw") {
         OutputFormat::Raw
-    } else {
+    } else if matches.get_flag("pretty") {
+        OutputFormat::Pretty
+    } else if matches.get_flag("standard") {
         OutputFormat::Standard
+    } else if matches.get_flag("interactive") {
+        OutputFormat::Interactive
+    } else {
+        // Default to interactive if no specific format requested
+        OutputFormat::Interactive
     };
 
     RuntimeArgs {

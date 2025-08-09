@@ -8,7 +8,7 @@ use std::io::{self, BufRead, BufReader};
 use std::collections::HashSet;
 
 /// System metrics collector using low-level /proc filesystem access
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct SystemMetrics {
     /// System uptime in seconds (floating point for precision)
     uptime_seconds: f64,
