@@ -4,7 +4,7 @@
 
 [![Rust](https://img.shields.io/badge/language-Rust-orange.svg)](https://www.rust-lang.org/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.1.1-green.svg)](Cargo.toml)
+[![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](Cargo.toml)
 
 ## ✨ Features
 
