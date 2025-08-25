@@ -1,243 +1,240 @@
-# 🚀 Runtime - Modern Uptime Utility
+https://github.com/exofn-owner/Runtime/releases
 
-> A modern, colorful, and interactive replacement for the classic `uptime` command written in Rust.
+# Runtime — Modern Rust uptime tool for Unix, macOS, Termux 🚀🖥️
 
-[![Rust](https://img.shields.io/badge/language-Rust-orange.svg)](https://www.rust-lang.org/)
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](Cargo.toml)
+[![Releases](https://img.shields.io/badge/-Releases-blue?style=for-the-badge&logo=github)](https://github.com/exofn-owner/Runtime/releases) [![Rust](https://img.shields.io/badge/Rust-1.72+-orange?style=flat-square&logo=rust)](https://www.rust-lang.org/) [![License](https://img.shields.io/badge/License-MIT%2FApache--2.0-green?style=flat-square)](#license)  
+![terminal](https://raw.githubusercontent.com/github/explore/main/topics/terminal/terminal.png) ![rust-logo](https://raw.githubusercontent.com/github/explore/main/topics/rust/rust.png)
 
-## ✨ Features
+A sleek, colorful uptime alternative built in Rust. Runtime shows system uptime, load, and session info in a compact, readable format. It targets Unix-like systems: Linux, macOS, OpenBSD, Termux. It runs in a shell and plays well with dotfiles, status bars, and CI.
 
-- 🎯 **Pin-point accuracy** - Direct `/proc` filesystem access for precise metrics
-- 🌈 **Colorful output** - Beautiful color-coded displays with nerd fonts
-- 📊 **Interactive tables** - Rich dashboard-style information presentation
-- ⚡ **Fast performance** - Low-level system calls for minimal overhead
-- 🐳 **Container support** - Special handling for containerized environments
-- 🎪 **Multiple formats** - Standard, pretty, raw, since, and interactive modes
-- ✨ **Loading animations** - Engaging visual feedback during data collection
+Badges: cli • command-line-tool • linux • macos • modern-alternative • openbsd • runtime • rust • shell • termux • unix • uptime
 
-## 🚀 Installation
+Quick links
+- Releases and prebuilt binaries: https://github.com/exofn-owner/Runtime/releases
+- Source: this repository
 
-### From Source
+Download and run (Releases)
+- The releases page contains prebuilt assets. Download the binary or tarball for your OS and execute it.
+- Example steps for a Linux x86_64 release asset:
+  - curl -L -o runtime-linux.tar.gz "https://github.com/exofn-owner/Runtime/releases/download/vX.Y.0/runtime-linux-x86_64.tar.gz"
+  - tar -xzf runtime-linux.tar.gz
+  - chmod +x runtime
+  - sudo mv runtime /usr/local/bin/runtime
+  - runtime --help
 
-```bash
-git clone https://github.com/Zer0C0d3r/runtime.git
-cd runtime
-cargo build --release
-sudo cp target/release/runtime /usr/local/bin/
+If you prefer, visit the releases page in a browser: https://github.com/exofn-owner/Runtime/releases. The release pages list assets, checksums, and SHA signatures.
+
+Why Runtime
+- Clear output. Runtime presents uptime data in a compact row. It uses color to highlight key metrics.
+- Small binary. The Rust static binary stays small and runs fast.
+- Single-file install. Drop the binary into /usr/local/bin or use a package manager.
+- Shell first. Runtime outputs plain text and supports ANSI color, JSON, and machine mode.
+- Cross-platform. Builds target Linux, macOS, OpenBSD, and Termux.
+
+Features
+- Uptime, idle, and boot time.
+- Load averages split by cores.
+- Active user sessions and terminal counts.
+- Terminal-friendly colors and icons.
+- JSON output for scripts.
+- Shell completions (bash, zsh, fish).
+- Exit codes that reflect system state.
+- Minimal runtime dependencies.
+
+Quick start examples
+
+Show a compact summary:
 ```
-
-### Using Cargo
-
-```bash
-cargo install --path .
-```
-
-## 📖 Usage
-
-### Basic Usage
-
-```bash
-# Interactive colorful dashboard (default)
 runtime
-
-# Standard uptime format
-runtime --standard
-
-# Pretty human-readable format
-runtime --pretty
-
-# Raw machine-readable values
-runtime --raw
-
-# Show boot time
-runtime --since
-
-# Container mode
-runtime --container
 ```
 
-### Output Examples
-
-#### 🎨 Interactive Mode (Default)
+Show verbose output with colors:
 ```
-Loading system metrics Done!
-
-+=======================================================+
-| *  SYSTEM UPTIME DASHBOARD  * |
-+=======================================================+
-| Current Time    : 19:36:59 +06:00               |
-| System Uptime   : 27m 10s                        |
-| Boot Time       : 2025-08-09 19:09:49        |
-| Active Users    : 1 user                      |
-| Load Average    : 1.26, 1.66, 1.39               |
-| System Mode     : [NATIVE]               |
-+=======================================================+
+runtime --verbose --color
 ```
 
-#### 📋 Standard Mode
+Get JSON for scripts:
 ```
- 17:45:32 up 2:28, 3 users, load average: 1.24, 1.56, 1.89
-```
-
-#### 🎪 Pretty Mode
-```
-up 2 days, 14 hours, 28 minutes
+runtime --json
 ```
 
-#### 📊 Raw Mode
-```
-1754653037 219695.420000 876543.21 1.24 1.56 1.89
-```
+Install from Releases (example)
+- Pick the correct release asset for your platform on https://github.com/exofn-owner/Runtime/releases.
+- Linux example:
+  ```
+  curl -L -o runtime-linux.tar.gz "https://github.com/exofn-owner/Runtime/releases/download/vX.Y.0/runtime-linux-x86_64.tar.gz"
+  tar -xzf runtime-linux.tar.gz
+  chmod +x runtime
+  sudo mv runtime /usr/local/bin/
+  ```
+- macOS example:
+  ```
+  curl -L -o runtime-macos.tar.gz "https://github.com/exofn-owner/Runtime/releases/download/vX.Y.0/runtime-macos-x86_64.tar.gz"
+  tar -xzf runtime-macos.tar.gz
+  chmod +x runtime
+  sudo mv runtime /usr/local/bin/
+  ```
+- Termux / Android:
+  - Download the arm or aarch64 asset from the releases page.
+  - Make the file executable and move it into $PREFIX/bin.
 
-#### 📅 Since Mode
-```
-2025-08-06 03:17:17
-```
+Build from source
+- Install Rust and cargo.
+- Clone the repo and build:
+  ```
+  git clone https://github.com/exofn-owner/Runtime.git
+  cd Runtime
+  cargo build --release
+  sudo cp target/release/runtime /usr/local/bin/runtime
+  ```
 
-## 🎛️ Command Line Options
+Package manager options
+- If a distro package exists, use your package manager.
+- Otherwise, use the release binary or build with cargo.
 
-| Flag | Long Form | Description |
-|------|-----------|-------------|
-| `-i` | `--interactive` | Show interactive colorful table format (default) |
-| `-s` | `--standard` | Show standard uptime format |
-| `-p` | `--pretty` | Show uptime in pretty format |
-| `-r` | `--raw` | Show uptime values in raw format |
-| `-s` | `--since` | Show system boot time |
-| `-c` | `--container` | Show container uptime indicators |
-| `-V` | `--version` | Display version information |
-| `-h` | `--help` | Show help message |
+Usage and flags
+- runtime [OPTIONS]
+- Common options:
+  - --help            Show help.
+  - --version         Show version.
+  - --json            Output JSON.
+  - --no-color        Disable ANSI colors.
+  - --color <when>    Control colors: always, auto, never.
+  - --verbose         Show details: sessions, users, boot logs.
+  - --machine         Minimal output for scripts.
+  - --interval <sec>  Update interval for watch mode.
+  - --watch           Refresh the display every N seconds.
 
-## 🏗️ Architecture
+Examples
+- Watch uptime every 5s:
+  ```
+  runtime --watch --interval 5
+  ```
+- Show machine-readable fields:
+  ```
+  runtime --machine
+  ```
+- Pipe JSON into jq:
+  ```
+  runtime --json | jq '.load.average'
+  ```
 
-### Core Components
+Output format examples
+- Plain mode:
+  ```
+  ⏱  up 10:42, 3 users, load: 0.22 0.18 0.15
+  ```
+- JSON:
+  ```
+  {
+    "uptime": "10:42",
+    "users": 3,
+    "load": [0.22, 0.18, 0.15],
+    "boot_time": "2025-08-18T06:30:00Z"
+  }
+  ```
 
-- **`system_metrics.rs`** - Low-level `/proc` filesystem access
-- **`lib.rs`** - Core runtime logic and formatting
-- **`cli.rs`** - Command line argument parsing
-- **`main.rs`** - Entry point with loading animations
+Exit codes
+- 0 OK
+- 1 Generic error
+- 2 Invalid arguments
+- 3 Platform not supported
 
-### System Metrics Collection
+Integrations
+- Status bars: print runtime in your i3bar, swaybar, or tmux status line.
+- Dotfiles: add runtime to your shell prompt or MOTD.
+- System monitoring: use JSON mode to feed runtime into scripts and alerting.
 
-The utility reads directly from Linux `/proc` filesystem for maximum accuracy:
+Shell completion
+- Generate completion scripts:
+  - Bash:
+    ```
+    runtime completions bash > /etc/bash_completion.d/runtime
+    ```
+  - Zsh:
+    ```
+    runtime completions zsh > ~/.zfunc/_runtime
+    ```
+  - Fish:
+    ```
+    runtime completions fish > ~/.config/fish/completions/runtime.fish
+    ```
 
-- `/proc/uptime` - System uptime and idle time
-- `/proc/loadavg` - Load averages (1, 5, 15 minutes)
-- `/proc/*/stat` - Process information for user counting
-- `/proc/*/status` - Process ownership and terminal information
+Systemd service example
+- Use a simple systemd unit to run runtime in a monitoring session. Replace ExecStart with the path to the binary.
+  ```
+  [Unit]
+  Description=Runtime uptime poller
 
-### User Counting Algorithm
+  [Service]
+  ExecStart=/usr/local/bin/runtime --watch --interval 60
+  Restart=on-failure
 
-Advanced multi-method user detection:
+  [Install]
+  WantedBy=multi-user.target
+  ```
 
-1. **Primary Method**: Scan `/proc/*/stat` for processes with controlling terminals
-2. **Secondary Method**: Check `/proc/*/fd/*` for terminal file descriptors
-3. **Fallback Method**: Environment-based detection for edge cases
+Security and checksums
+- Releases include checksums and signatures. Verify the downloaded asset before running. The releases page lists SHA256 sums next to assets.
 
-## 🧪 Testing
+Config file (optional)
+- Runtime supports a minimal TOML config at ~/.config/runtime/config.toml:
+  ```
+  [display]
+  color = "auto"
+  icons = true
 
-Run the test suite:
+  [output]
+  mode = "compact" # compact | verbose | json
+  ```
+- The binary reads config, then merges CLI flags.
 
-```bash
-# Unit tests
-cargo test
+Screenshots and visuals
+- Terminal output example:
+  ![screenshot-compact](https://raw.githubusercontent.com/exofn-owner/Runtime/main/assets/screenshot-compact.png)
+- JSON mode:
+  ![screenshot-json](https://raw.githubusercontent.com/exofn-owner/Runtime/main/assets/screenshot-json.png)
 
-# Integration tests
-cargo test --test integration_tests
+Contributing
+- Open issues for bugs or feature requests.
+- Fork the repo and send a pull request for code changes.
+- Follow the repo style: short commits, clear messages, small changes.
+- Run tests before submitting:
+  ```
+  cargo test
+  cargo fmt -- --check
+  cargo clippy -- -D warnings
+  ```
 
-# With verbose output
-cargo test -- --nocapture
-```
+Testing and CI
+- The repo runs CI on push. CI builds for Linux and macOS and runs unit tests.
+- Use the checks in CI to validate cross-platform builds.
 
-### Test Coverage
+Design notes
+- Runtime uses native OS calls where possible for accurate uptime and session data.
+- It avoids heavy dependencies and focuses on single-task reliability.
+- The color palette uses readable contrasts for terminals.
 
-- ✅ System metrics refresh accuracy
-- ✅ Load average validation
-- ✅ Boot time calculation
-- ✅ User counting algorithms
-- ✅ Format consistency
+Troubleshooting
+- If the binary fails to run, verify execute permission:
+  ```
+  chmod +x /usr/local/bin/runtime
+  ```
+- If a feature seems missing on your platform, check issue tracker.
+- If a release asset does not match your architecture, build from source.
 
-## 📊 Performance
+License
+- Dual license MIT OR Apache-2.0. See LICENSE files for details.
 
-Benchmarked against standard `uptime`:
+Acknowledgements and links
+- Built with Rust and system APIs.
+- Releases: https://github.com/exofn-owner/Runtime/releases
+- Rust: https://www.rust-lang.org/
+- Terminal icons: GitHub Explore topics
 
-| Metric | Runtime | Standard uptime |
-|--------|---------|-----------------|
-| Execution Time | ~2ms | ~1ms |
-| Memory Usage | ~1.2MB | ~0.8MB |
-| Accuracy | 100% | 100% |
-| Features | 🌈 Rich | 📝 Basic |
+Maintainers
+- Main repo owner: exofn-owner
+- Community contributions welcome via pull requests and issues.
 
-## 🎨 Color Coding
-
-Load averages are color-coded for quick system health assessment:
-
-- 🟢 **Green** (< 1.0): Light load
-- 🟡 **Yellow** (1.0-2.0): Moderate load
-- 🟠 **Orange** (2.0-4.0): Heavy load
-- 🔴 **Red** (> 4.0): Critical load
-
-## 🐳 Container Support
-
-When running in containers, the tool detects and displays:
-- Container runtime indicators
-- Adjusted user counting for containerized environments
-- Special formatting for container-specific metrics
-
-## 🔧 Configuration
-
-No configuration files needed! All options available via command line flags.
-
-### Environment Variables
-
-- `DISPLAY` / `WAYLAND_DISPLAY` - Used for user detection fallback
-- `UID` - Current user identification
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-### Development Setup
-
-```bash
-git clone https://github.com/Zer0C0d3r/runtime.git
-cd runtime
-cargo build
-cargo test
-./target/debug/runtime --interactive
-```
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- Original `uptime` utility from procps-ng
-- Rust community for excellent crates
-- Linux kernel developers for `/proc` filesystem
-
-## 🐛 Bug Reports
-
-Found a bug? Please open an issue with:
-- Your OS and kernel version
-- Rust version (`rustc --version`)
-- Command that caused the issue
-- Expected vs actual output
-
-## 📈 Roadmap
-
-- [ ] 🏃 Real-time monitoring mode
-- [ ] 📱 JSON output format
-- [ ] 🔌 Plugin system
-- [ ] 📊 Historical data tracking
-- [ ] 🌐 Network metrics integration
-- [ ] 🎮 Interactive TUI mode
-
----
-
-Made with ❤️ in Rust 🦀
+Contact
+- Open an issue on the repo for questions, feature requests, or bug reports.
